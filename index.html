@@ -4,26 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SeedZero To-Do List</title>
-
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
   <body>
     <main class="main-container">
       <div class="card">
-        <h1 class="todo-title">TO-DO LIST</h1>
-        <form onsubmit="handleAddTodo(event)" class="todo-form">
+        <h1 class="title">TO-DO LIST</h1>
+
+        <form onsubmit="addTodo(event)" class="todo-form">
           <input
             type="text"
             name="todo"
-            id="todo-input"
             placeholder="Enter your todo here"
             spellcheck="true"
             autocomplete="off"
           />
           <button type="submit">Add todo</button>
         </form>
-        <ul id="todo-list"></ul>
+        <ul class="todo-list"></ul>
       </div>
     </main>
   </body>
