@@ -35,6 +35,19 @@ function init() {
   renderTodoList();
 }
 
+function loadTodos() {
+  // check if todos exist in local storage
+  if (localStorage.getItem("todos")) {
+    // if exist, get todos from local storage and convert to object
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
+}
+
+function saveTodos() {
+  // convert todos object to string and save to local storage
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
 function TodoComponent(todo) {
   const { id, name, isDone } = todo;
 
@@ -60,52 +73,51 @@ function TodoComponent(todo) {
 }
 
 function renderTodoList() {
+  // get todo list element
   const todoList = document.querySelector(".todo-list");
+  // clear todo list
   todoList.innerHTML = "";
-
-  todos.forEach((todo) => {
+  // loop through todos and render each todo
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
     todoList.innerHTML += TodoComponent(todo);
-  });
+  }
 }
 
 function addTodo(event) {
   event.preventDefault();
-  todos.push({
-    id: Math.random().toString(),
+  const newTodo = {
+    id: crypto.randomUUID(),
     name: event.target.todo.value,
     isDone: false,
-  });
+  };
+
+  // add new todo to todos
+  todos.push(newTodo);
+  // clear input value
   event.target.todo.value = "";
+  // rerender todo list and save todos
   renderTodoList();
   saveTodos();
 }
 
 function toggleDone(id) {
-  todos = todos.map((todo) => {
-    if (todo.id === id) {
-      return {
-        ...todo,
-        isDone: !todo.isDone,
-      };
+  // loop through todos and find todo with same id then toggle isDone
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].id === id) {
+      todos[i].isDone = !todos[i].isDone;
+      break;
     }
-    return todo;
-  });
+  }
+  // rerender todo list and save todos
   renderTodoList();
   saveTodos();
 }
 
 function deleteTodo(id) {
+  // filter out todo with id
   todos = todos.filter((todo) => todo.id !== id);
+  // rerender todo list and save todos
   renderTodoList();
   saveTodos();
-}
-
-function loadTodos() {
-  if (localStorage.getItem("todos")) {
-    todos = JSON.parse(localStorage.getItem("todos"));
-  }
-}
-
-function saveTodos() {
-  localStorage.setItem("todos", JSON.stringify(todos));
 }
